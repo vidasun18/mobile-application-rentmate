@@ -1,0 +1,33 @@
+{
+  "after_api_restart": true,
+  "checked_at": "2026-10-18T10:10:12.4268972Z",
+  "accounts": [
+    {
+      "persisted_id_ok": true,
+      "role": "ADMIN",
+      "login_ok": true
+    },
+    {
+      "persisted_id_ok": true,
+      "role": "TOURIST",
+      "login_ok": true
+    },
+    {
+      "persisted_id_ok": true,
+      "role": "AGENT",
+      "login_ok": true
+    },
+    {
+      "persisted_id_ok": true,
+      "role": "DRIVER",
+      "login_ok": true
+    },
+    {
+      "persisted_id_ok": true,
+      "role": "DRIVER",
+      "login_ok": true
+    }
+  ],
+  "database": "SQLite file .local/rentmate.db",
+  "health": "ok"
+}

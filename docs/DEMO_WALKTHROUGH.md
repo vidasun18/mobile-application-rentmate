@@ -1,0 +1,19 @@
+# Demonstrator walkthrough
+
+Run `npm.cmd run local` inside `backend`. It creates a persistent SQLite database and five fictional demo accounts on the first launch. Read their generated passwords from `.local/demo-accounts.json`. Keep the API running while using the Android app. Use the seeded accounts, or register a fresh tourist, agent and two drivers for the verification/application steps below. PostgreSQL provisioning remains an optional alternative described in README. All records are database-backed.
+
+1. Drivers open Profile, save licence details, add a VAN or KDH with enough seats and upload photos/documents. Local mode saves these under `.local/media/` without a cloud account. Changes to licence information reset account approval. Vehicle edits reset vehicle approval and are blocked while it has an active trip.
+2. The admin opens Verification, records a reason before viewing full details, uses View to inspect documents/pending photos, approves vehicle/photos and approves agent/driver accounts. Status changes invalidate existing tokens, so sign in again after approval. Only fictional files should be used in this development walkthrough.
+3. Each driver finds the agent in Agencies and applies. The agent opens My drivers and accepts both applications.
+4. The tourist selects the agent in Agents and sends a future Mirissa → Ella tour request, with start/end time, vehicle type and passengers.
+5. The agent opens the request, quotes LKR 20,000 with LKR 5,000 deposit and terms. The tourist accepts.
+6. The agent records the deposit when received externally and posts: payout LKR 12,000, driver collection LKR 15,000. The private commission is LKR 8,000; the driver card shows a LKR 3,000 handover under the explicit collection exception.
+7. Both matching agency drivers express interest. The agent reviews their cards and selects one. Only one assignment can succeed. Other drivers see Taken.
+8. The agent opens Confirm and Send, checks both previews, leaves contact sharing off and sends. The tourist receives the driver/vehicle card, and the selected driver receives first name, route, payout and collection instructions. Check that the driver cannot see total/deposit/commission, and that the tourist cannot see driver phone/payout.
+9. The tourist asks to change pickup. The agent approves with the structured new location/time. The driver's previous acknowledgment is cleared. The driver acknowledges the update, starts and completes the trip.
+10. The tourist rates the agent and driver. The agent rates the driver, records the agreed settlement and both agent/driver confirm their sides. Duplicate ratings and pre-completion ratings fail.
+11. Repeat with another future request. Send with contact sharing enabled, have the chosen driver withdraw and the agent reopen with a reason. Confirm the old driver's detail endpoint returns 404, the tourist's old card disappears, and the replacement driver can be selected and sent a new card.
+12. Load My trips, disconnect the device and refresh. Saved route/status summaries appear with a timestamp and offline banner. Tap one to open the saved read-only detail. Contact data and writes require reconnection. Sign out; another account must not see these cached records.
+13. Open Profile → Trip history and inspect completed, withdrawn and reassigned entries. Reassigned drivers retain only the old route snapshot and cannot open the live tour. Open an inbox notification and verify its tour, membership or account destination.
+
+Measure posting and Send taps after fields are filled (target ≤5). Evaluate on at least three Android devices/emulators, including API 26, and gather SUS responses from at least 10 participants (target ≥68). These are human/device acceptance tasks; automated test success does not supply their results.

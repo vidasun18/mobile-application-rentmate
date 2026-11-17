@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-19",
+  "artifact": "deliverables/RentMate-server-debug.apk",
+  "application_id": "lk.rentmate.server",
+  "version_name": "0.1.0",
+  "version_code": 1,
+  "bytes": 301579969,
+  "sha256": "BA087984685DAAE66734B6525E73839D6237C41723D9FDB344394E1D382DB9D4",
+  "min_sdk": 26,
+  "target_sdk": 36,
+  "abis": [
+    "arm64-v8a",
+    "armeabi-v7a",
+    "x86_64"
+  ],
+  "build": {
+    "ndk": "28.2.13676358",
+    "status": "passed",
+    "gradle": "9.3.1",
+    "agp": "9.1.0",
+    "jdk": "21",
+    "tasks_executed": 48,
+    "cmake": "3.22.1"
+  },
+  "android_unit_tests": {
+    "errors": 0,
+    "failures": 0,
+    "passed": 2
+  },
+  "sqlite_api_tests": {
+    "failed": 0,
+    "report": "docs/sqlite-test-results.json",
+    "suites_passed": 7,
+    "passed": 28
+  },
+  "signature": {
+    "kind": "Android debug",
+    "verified": true,
+    "scheme": "v2",
+    "certificate_sha256": "a5dfeb02163668b48d243387ba512da432f894be13d9dab5c810ccfc76689557"
+  },
+  "zip_16kb_alignment_verified": true,
+  "node_elf_load_alignment_at_least_16kb": true,
+  "private_payload_exclusion_verified": true,
+  "runtime": {
+    "runtime_source": "fogtape/nodejs-mobile",
+    "runtime_preview": true,
+    "runtime_version": "24.22.0-0",
+    "entry_sha256": "b46090034793be180c262c6312f5a2912d1a8b7b3761906210c8213bccae31aa",
+    "license_source": "https://raw.githubusercontent.com/fogtape/nodejs-mobile/v24.22.0-0/LICENSE",
+    "sdk_sha256": "9B068F4AD4C755F26C04B31883C536F037A4831E6575847A699CDF5FA72DDE25",
+    "packages": 239,
+    "payload_sha256": "2502778244B84693479EDB4D69E199564CB09EA2594001916C04C4DCE5BC338D",
+    "license_sha256": "C373DABED995013E091B1908996A69A1647EF19D400E6C1FD4B7FB06D8BC0F66"
+  },
+  "device_validation": {
+    "two_phone_hotspot": "not run",
+    "server_startup": "not run",
+    "attached_adb_devices": 0,
+    "background_screen_off": "not run",
+    "backup_ui": "not run"
+  }
+}

@@ -1,0 +1,1223 @@
+{
+  "info": {
+    "name": "RentMate API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "id",
+      "value": ""
+    },
+    {
+      "key": "email",
+      "value": ""
+    },
+    {
+      "key": "password",
+      "value": ""
+    },
+    {
+      "key": "agentId",
+      "value": ""
+    },
+    {
+      "key": "driverId",
+      "value": ""
+    },
+    {
+      "key": "vehicleId",
+      "value": ""
+    },
+    {
+      "key": "tourId",
+      "value": ""
+    },
+    {
+      "key": "membershipId",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "mediaId",
+      "value": ""
+    },
+    {
+      "key": "notificationId",
+      "value": ""
+    },
+    {
+      "key": "changeId",
+      "value": ""
+    },
+    {
+      "key": "ratingTargetId",
+      "value": ""
+    },
+    {
+      "key": "pushToken",
+      "value": ""
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.collectionVariables.set('startsAt', new Date(Date.now()+3*86400000).toISOString());",
+          "pm.collectionVariables.set('endsAt', new Date(Date.now()+3*86400000+4*3600000).toISOString());"
+        ]
+      }
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Readiness",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/health",
+        "description": "Public. See openapi.json for exact request schema.",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "Register tourist, agent or driver",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/register",
+        "description": "Public. See openapi.json for exact request schema: register.",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\",\n  \"role\": \"TOURIST\",\n  \"name\": \"Example tourist\",\n  \"phone\": \"+94000000000\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code < 300) { const data = pm.response.json().data;",
+              "pm.collectionVariables.set('token',data.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sign in",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/login",
+        "description": "Public. See openapi.json for exact request schema: login.",
+        "auth": {
+          "type": "noauth"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"password\": \"{{password}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code < 300) { const data = pm.response.json().data;",
+              "pm.collectionVariables.set('token',data.token);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Revoke all user sessions and push tokens",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/auth/logout",
+        "description": "All. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Own profile",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/me",
+        "description": "All. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Own historical trip summaries, with revoked assignments frozen",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/me/history",
+        "description": "TOURIST, AGENT, DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Tour counts, pending applications and unread alerts",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/me/dashboard",
+        "description": "AGENT. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Edit own profile",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/me",
+        "description": "All. See openapi.json for exact request schema: profile.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Example user\",\n  \"phone\": \"+94000000000\",\n  \"bio\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Own vehicles",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/vehicles",
+        "description": "DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Register vehicle",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/vehicles",
+        "description": "DRIVER. See openapi.json for exact request schema: vehicle.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"VAN\",\n  \"registration\": \"EXAMPLE-001\",\n  \"model\": \"Toyota van\",\n  \"seats\": 9\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code < 300) { const data = pm.response.json().data;",
+              "pm.collectionVariables.set('vehicleId',data.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Edit unused vehicle and reset approval",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/vehicles/{{vehicleId}}",
+        "description": "DRIVER. See openapi.json for exact request schema: vehicle.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"VAN\",\n  \"registration\": \"EXAMPLE-001\",\n  \"model\": \"Toyota van\",\n  \"seats\": 9\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Search verified agents",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/agents",
+        "description": "TOURIST, DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Own agency memberships",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/agencies/members",
+        "description": "AGENT, DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Apply to agency",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/agencies/{{agentId}}/apply",
+        "description": "DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Review or remove own membership",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/agencies/members/{{membershipId}}",
+        "description": "AGENT. See openapi.json for exact request schema: membership.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"ACCEPTED\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Role-filtered tour list",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours",
+        "description": "TOURIST, AGENT, DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Role-filtered tour detail",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}",
+        "description": "TOURIST, AGENT, DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Request tour",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours",
+        "description": "TOURIST. See openapi.json for exact request schema: request.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"agent_id\": \"{{agentId}}\",\n  \"pickup\": \"Mirissa hotel\",\n  \"destination\": \"Ella\",\n  \"starts_at\": \"{{startsAt}}\",\n  \"ends_at\": \"{{endsAt}}\",\n  \"vehicle_type\": \"VAN\",\n  \"passengers\": 3,\n  \"notes\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "if (pm.response.code < 300) { const data = pm.response.json().data;",
+              "pm.collectionVariables.set('tourId',data.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Quote request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/quote",
+        "description": "AGENT. See openapi.json for exact request schema: quote.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"total_minor\": 2000000,\n  \"deposit_minor\": 500000,\n  \"terms\": \"Deposit arranged through the agent\",\n  \"currency\": \"LKR\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Accept or decline quote",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/accept",
+        "description": "TOURIST. See openapi.json for exact request schema: accept.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accept\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Post accepted tour",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/post",
+        "description": "AGENT. See openapi.json for exact request schema: post.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"payout_minor\": 1200000,\n  \"collector\": \"DRIVER\",\n  \"collection_minor\": 1500000,\n  \"instructions\": \"Collect the agreed balance at pickup\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Record whether deposit was received",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/deposit",
+        "description": "AGENT. See openapi.json for exact request schema: accept.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accept\": true\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Express interest; acknowledge overlap warning explicitly",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/interest",
+        "description": "DRIVER. See openapi.json for exact request schema: interest.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"vehicle_id\": \"{{vehicleId}}\",\n  \"acknowledge_overlap\": false\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Atomically assign interested eligible driver",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/assign",
+        "description": "AGENT. See openapi.json for exact request schema: assign.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"driver_id\": \"{{driverId}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Audited idempotent release",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Idempotency-Key",
+            "value": "{{$guid}}"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/send",
+        "description": "AGENT. See openapi.json for exact request schema: send.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"release_phone\": false\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Audited contact release or revocation",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/contact",
+        "description": "AGENT. See openapi.json for exact request schema: send.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"release_phone\": false\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Acknowledge latest released details",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/acknowledge",
+        "description": "DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Notify agent of withdrawal",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/withdraw",
+        "description": "DRIVER. See openapi.json for exact request schema: reason.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Verification or safety review\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Revoke assignment and reopen",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/reopen",
+        "description": "AGENT. See openapi.json for exact request schema: reason.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Verification or safety review\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Start or complete acknowledged trip",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/status",
+        "description": "DRIVER. See openapi.json for exact request schema: status.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"IN_PROGRESS\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Cancel before departure",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/cancel",
+        "description": "TOURIST, AGENT. See openapi.json for exact request schema: reason.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Verification or safety review\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Request change",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/changes",
+        "description": "TOURIST. See openapi.json for exact request schema: change.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"request\": \"Please change the hotel pickup location\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Rate completed trip",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/rating",
+        "description": "TOURIST, AGENT. See openapi.json for exact request schema: rating.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"target_id\": \"{{ratingTargetId}}\",\n  \"score\": 5,\n  \"comment\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Record exact agreed settlement",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/settlement",
+        "description": "AGENT. See openapi.json for exact request schema: settlement.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount_minor\": 300000,\n  \"note\": \"Agreed handover\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Review interested driver cards",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/interests",
+        "description": "AGENT. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Preview both release cards",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/preview",
+        "description": "AGENT. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Approve structured update or reject",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/changes/{{changeId}}/review",
+        "description": "AGENT. See openapi.json for exact request schema: reviewChange.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"accept\": true,\n  \"response\": \"Pickup change approved\",\n  \"pickup\": \"Updated hotel reception\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Confirm own settlement side",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/tours/{{tourId}}/settlement/confirm",
+        "description": "AGENT, DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Own settlement records",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/settlements",
+        "description": "AGENT, DRIVER. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Own received ratings",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/ratings/me",
+        "description": "All. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Own inbox",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/notifications",
+        "description": "All. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Mark own notification read",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/notifications/{{notificationId}}",
+        "description": "All. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Register device token",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/notifications/push-token",
+        "description": "All. See openapi.json for exact request schema: pushToken.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"{{pushToken}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Unregister device token",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/notifications/push-token",
+        "description": "All. See openapi.json for exact request schema: pushToken.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"token\": \"{{pushToken}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Public verification queue by status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/users",
+        "description": "ADMIN. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Verify, reject or suspend",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/users/{{userId}}",
+        "description": "ADMIN. See openapi.json for exact request schema: verification.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"APPROVED\",\n  \"reason\": \"Identity documents reviewed\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Audited private account read",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/users/{{userId}}/details",
+        "description": "ADMIN. See openapi.json for exact request schema: reason.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Verification or safety review\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Approve vehicle and photos",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/vehicles/{{vehicleId}}",
+        "description": "ADMIN. See openapi.json for exact request schema: reason.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Verification or safety review\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Audited private trip read",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/tours/{{id}}/details",
+        "description": "ADMIN. See openapi.json for exact request schema: reason.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Verification or safety review\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Review audit log",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/audit",
+        "description": "ADMIN. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Own media metadata",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/media",
+        "description": "All. See openapi.json for exact request schema."
+      }
+    },
+    {
+      "name": "Local photo or expiring signed private image; unapproved images require an owner/admin media token",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/media/{{mediaId}}/image",
+        "description": "Public. See openapi.json for exact request schema.",
+        "auth": {
+          "type": "noauth"
+        }
+      }
+    },
+    {
+      "name": "Upload JPEG/PNG to Cloudinary",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/media",
+        "description": "DRIVER, AGENT. See openapi.json for exact request schema: upload.",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "kind",
+              "value": "DOCUMENT",
+              "type": "text"
+            },
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "View own file, or audited admin view",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/media/{{mediaId}}/view",
+        "description": "Owner, ADMIN. See openapi.json for exact request schema: reason.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Verification or safety review\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Approve public photo",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/admin/media/{{mediaId}}",
+        "description": "ADMIN. See openapi.json for exact request schema: reason.",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reason\": \"Verification or safety review\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

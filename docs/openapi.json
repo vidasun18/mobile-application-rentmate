@@ -1,0 +1,3389 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "RentMate API",
+    "version": "0.1.0",
+    "description": "Agent-controlled transport. Money is integer LKR minor units. Agents/drivers need APPROVED status for business operations. All errors are {error:{code,message,details?}}; success is {data:...}. Driver responses omit total, deposit, commission and private documents. Tourist responses omit driver phone/payout/commission. Admin private reads require a reason and are audited."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Readiness",
+        "description": "Allowed roles: Public. Ownership and eligibility checked server-side.",
+        "tags": [
+          "health"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Register tourist, agent or driver",
+        "description": "Allowed roles: Public. Ownership and eligibility checked server-side.",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/register"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Sign in",
+        "description": "Allowed roles: Public. Ownership and eligibility checked server-side.",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/login"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "summary": "Revoke all user sessions and push tokens",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "auth"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "summary": "Own profile",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "me"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      },
+      "put": {
+        "summary": "Edit own profile",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "me"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/profile"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/me/history": {
+      "get": {
+        "summary": "Own historical trip summaries, with revoked assignments frozen",
+        "description": "Allowed roles: TOURIST, AGENT, DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "me"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/me/dashboard": {
+      "get": {
+        "summary": "Tour counts, pending applications and unread alerts",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "me"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/vehicles": {
+      "get": {
+        "summary": "Own vehicles",
+        "description": "Allowed roles: DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "vehicles"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      },
+      "post": {
+        "summary": "Register vehicle",
+        "description": "Allowed roles: DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "vehicles"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/vehicle"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vehicles/{id}": {
+      "put": {
+        "summary": "Edit unused vehicle and reset approval",
+        "description": "Allowed roles: DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "vehicles"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/vehicle"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents": {
+      "get": {
+        "summary": "Search verified agents",
+        "description": "Allowed roles: TOURIST, DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "agents"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/agencies/members": {
+      "get": {
+        "summary": "Own agency memberships",
+        "description": "Allowed roles: AGENT, DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "agencies"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/agencies/{id}/apply": {
+      "post": {
+        "summary": "Apply to agency",
+        "description": "Allowed roles: DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "agencies"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/agencies/members/{id}": {
+      "patch": {
+        "summary": "Review or remove own membership",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "agencies"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/membership"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours": {
+      "get": {
+        "summary": "Role-filtered tour list",
+        "description": "Allowed roles: TOURIST, AGENT, DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      },
+      "post": {
+        "summary": "Request tour",
+        "description": "Allowed roles: TOURIST. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/request"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}": {
+      "get": {
+        "summary": "Role-filtered tour detail",
+        "description": "Allowed roles: TOURIST, AGENT, DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/tours/{id}/quote": {
+      "post": {
+        "summary": "Quote request",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/quote"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/accept": {
+      "post": {
+        "summary": "Accept or decline quote",
+        "description": "Allowed roles: TOURIST. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/accept"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/post": {
+      "post": {
+        "summary": "Post accepted tour",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/post"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/deposit": {
+      "post": {
+        "summary": "Record whether deposit was received",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/accept"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/interest": {
+      "post": {
+        "summary": "Express interest; acknowledge overlap warning explicitly",
+        "description": "Allowed roles: DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/interest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/assign": {
+      "post": {
+        "summary": "Atomically assign interested eligible driver",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/assign"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/send": {
+      "post": {
+        "summary": "Audited idempotent release",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 100
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/send"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/contact": {
+      "post": {
+        "summary": "Audited contact release or revocation",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/send"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/acknowledge": {
+      "post": {
+        "summary": "Acknowledge latest released details",
+        "description": "Allowed roles: DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/tours/{id}/withdraw": {
+      "post": {
+        "summary": "Notify agent of withdrawal",
+        "description": "Allowed roles: DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reason"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/reopen": {
+      "post": {
+        "summary": "Revoke assignment and reopen",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reason"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/status": {
+      "post": {
+        "summary": "Start or complete acknowledged trip",
+        "description": "Allowed roles: DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/status"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/cancel": {
+      "post": {
+        "summary": "Cancel before departure",
+        "description": "Allowed roles: TOURIST, AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reason"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/changes": {
+      "post": {
+        "summary": "Request change",
+        "description": "Allowed roles: TOURIST. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/change"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/rating": {
+      "post": {
+        "summary": "Rate completed trip",
+        "description": "Allowed roles: TOURIST, AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/rating"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/settlement": {
+      "post": {
+        "summary": "Record exact agreed settlement",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/settlement"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/interests": {
+      "get": {
+        "summary": "Review interested driver cards",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/tours/{id}/preview": {
+      "get": {
+        "summary": "Preview both release cards",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/tours/{id}/changes/{changeId}/review": {
+      "post": {
+        "summary": "Approve structured update or reject",
+        "description": "Allowed roles: AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "in": "path",
+            "name": "changeId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reviewChange"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tours/{id}/settlement/confirm": {
+      "post": {
+        "summary": "Confirm own settlement side",
+        "description": "Allowed roles: AGENT, DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "tours"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/settlements": {
+      "get": {
+        "summary": "Own settlement records",
+        "description": "Allowed roles: AGENT, DRIVER. Ownership and eligibility checked server-side.",
+        "tags": [
+          "settlements"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/ratings/me": {
+      "get": {
+        "summary": "Own received ratings",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "ratings"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/notifications": {
+      "get": {
+        "summary": "Own inbox",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "notifications"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/notifications/{id}": {
+      "patch": {
+        "summary": "Mark own notification read",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "notifications"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/notifications/push-token": {
+      "post": {
+        "summary": "Register device token",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "notifications"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/pushToken"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Unregister device token",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "notifications"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/pushToken"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/users": {
+      "get": {
+        "summary": "Public verification queue by status",
+        "description": "Allowed roles: ADMIN. Ownership and eligibility checked server-side.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "enum": [
+                "PENDING",
+                "APPROVED",
+                "REJECTED",
+                "SUSPENDED"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/admin/users/{id}": {
+      "patch": {
+        "summary": "Verify, reject or suspend",
+        "description": "Allowed roles: ADMIN. Ownership and eligibility checked server-side.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/verification"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/users/{id}/details": {
+      "post": {
+        "summary": "Audited private account read",
+        "description": "Allowed roles: ADMIN. Ownership and eligibility checked server-side.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reason"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/vehicles/{id}": {
+      "patch": {
+        "summary": "Approve vehicle and photos",
+        "description": "Allowed roles: ADMIN. Ownership and eligibility checked server-side.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reason"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/tours/{id}/details": {
+      "post": {
+        "summary": "Audited private trip read",
+        "description": "Allowed roles: ADMIN. Ownership and eligibility checked server-side.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reason"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/audit": {
+      "get": {
+        "summary": "Review audit log",
+        "description": "Allowed roles: ADMIN. Ownership and eligibility checked server-side.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      }
+    },
+    "/media": {
+      "get": {
+        "summary": "Own media metadata",
+        "description": "Allowed roles: All. Ownership and eligibility checked server-side.",
+        "tags": [
+          "media"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        }
+      },
+      "post": {
+        "summary": "Upload JPEG/PNG to Cloudinary",
+        "description": "Allowed roles: DRIVER, AGENT. Ownership and eligibility checked server-side.",
+        "tags": [
+          "media"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/upload"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/media/{id}/image": {
+      "get": {
+        "summary": "Local photo or expiring signed private image; unapproved images require an owner/admin media token",
+        "description": "Allowed roles: Public. Ownership and eligibility checked server-side.",
+        "tags": [
+          "media"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "security": []
+      }
+    },
+    "/media/{id}/view": {
+      "post": {
+        "summary": "View own file, or audited admin view",
+        "description": "Allowed roles: Owner, ADMIN. Ownership and eligibility checked server-side.",
+        "tags": [
+          "media"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reason"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/media/{id}": {
+      "patch": {
+        "summary": "Approve public photo",
+        "description": "Allowed roles: ADMIN. Ownership and eligibility checked server-side.",
+        "tags": [
+          "admin"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success envelope"
+          },
+          "201": {
+            "description": "Created success envelope"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Missing/expired token"
+          },
+          "403": {
+            "description": "Role or approval denied"
+          },
+          "404": {
+            "description": "Inaccessible or missing resource"
+          },
+          "409": {
+            "description": "Conflicting transition, duplicate or assignment race"
+          },
+          "422": {
+            "description": "Business input rejected"
+          },
+          "503": {
+            "description": "External adapter unavailable"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/reason"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "register": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "format": "email",
+            "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 12,
+            "maxLength": 72
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "TOURIST",
+              "AGENT",
+              "DRIVER"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "phone": {
+            "type": "string",
+            "minLength": 7,
+            "maxLength": 25
+          },
+          "agency_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "role",
+          "name",
+          "phone"
+        ],
+        "additionalProperties": false
+      },
+      "login": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 72
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "additionalProperties": false
+      },
+      "profile": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "phone": {
+            "type": "string",
+            "minLength": 7,
+            "maxLength": 25
+          },
+          "bio": {
+            "default": "",
+            "type": "string",
+            "maxLength": 1000
+          },
+          "licence_number": {
+            "type": "string",
+            "maxLength": 60
+          },
+          "licence_expiry": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "agency_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "name",
+          "phone"
+        ],
+        "additionalProperties": false
+      },
+      "vehicle": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "CAR",
+              "VAN",
+              "KDH"
+            ]
+          },
+          "registration": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 30
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "seats": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 60
+          }
+        },
+        "required": [
+          "type",
+          "registration",
+          "model",
+          "seats"
+        ],
+        "additionalProperties": false
+      },
+      "request": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "agent_id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "pickup": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "destination": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "vehicle_type": {
+            "type": "string",
+            "enum": [
+              "CAR",
+              "VAN",
+              "KDH"
+            ]
+          },
+          "passengers": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 60
+          },
+          "notes": {
+            "default": "",
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "agent_id",
+          "pickup",
+          "destination",
+          "starts_at",
+          "ends_at",
+          "vehicle_type",
+          "passengers"
+        ],
+        "additionalProperties": false
+      },
+      "quote": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "total_minor": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 10000000000
+          },
+          "deposit_minor": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000000
+          },
+          "terms": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "currency": {
+            "default": "LKR",
+            "type": "string",
+            "const": "LKR"
+          }
+        },
+        "required": [
+          "total_minor",
+          "deposit_minor",
+          "terms"
+        ],
+        "additionalProperties": false
+      },
+      "accept": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "accept": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "accept"
+        ],
+        "additionalProperties": false
+      },
+      "post": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "payout_minor": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000000
+          },
+          "collector": {
+            "type": "string",
+            "enum": [
+              "AGENT",
+              "DRIVER"
+            ]
+          },
+          "collection_minor": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000000
+          },
+          "instructions": {
+            "default": "",
+            "type": "string",
+            "maxLength": 2000
+          }
+        },
+        "required": [
+          "payout_minor",
+          "collector",
+          "collection_minor"
+        ],
+        "additionalProperties": false
+      },
+      "interest": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "vehicle_id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "acknowledge_overlap": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "vehicle_id"
+        ],
+        "additionalProperties": false
+      },
+      "assign": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "driver_id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          }
+        },
+        "required": [
+          "driver_id"
+        ],
+        "additionalProperties": false
+      },
+      "send": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "release_phone": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "reason": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "status": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "IN_PROGRESS",
+              "COMPLETED"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "rating": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "target_id": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+          },
+          "score": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "comment": {
+            "default": "",
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "target_id",
+          "score"
+        ],
+        "additionalProperties": false
+      },
+      "settlement": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "amount_minor": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000000000
+          },
+          "note": {
+            "default": "",
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "amount_minor"
+        ],
+        "additionalProperties": false
+      },
+      "membership": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACCEPTED",
+              "REJECTED",
+              "REMOVED"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "verification": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "APPROVED",
+              "REJECTED",
+              "SUSPENDED"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "status",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "change": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "request": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "request"
+        ],
+        "additionalProperties": false
+      },
+      "reviewChange": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "accept": {
+            "type": "boolean"
+          },
+          "response": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "pickup": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          },
+          "starts_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "ends_at": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          }
+        },
+        "required": [
+          "accept",
+          "response"
+        ],
+        "additionalProperties": false
+      },
+      "pushToken": {
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "properties": {
+          "token": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 4096
+          }
+        }
+      },
+      "upload": {
+        "type": "object",
+        "required": [
+          "kind",
+          "file"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "DOCUMENT",
+              "VEHICLE_PHOTO",
+              "PROFILE_PHOTO"
+            ]
+          },
+          "vehicle_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "file": {
+            "type": "string",
+            "format": "binary"
+          }
+        }
+      }
+    }
+  }
+}
